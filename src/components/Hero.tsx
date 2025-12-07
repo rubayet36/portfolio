@@ -26,7 +26,7 @@ export function Hero() {
           Available for freelance work
         </div>
         <h1>Hi, I'm Rubayet - Front-End Engineer</h1>
-        <p>I build modern, fast, elegant web apps with React, TypeScript, and AI.</p>
+        <p>I build modern, fast, elegant web apps with Java Script, TypeScript, and AI.</p>
         <br />
         <button onClick={() => alert("Enable JS to scroll")}>View Projects (Button)</button>
         <br /><br />

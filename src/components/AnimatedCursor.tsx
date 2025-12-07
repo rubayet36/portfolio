@@ -2,12 +2,11 @@ import { useEffect, useState } from 'react';
 import { usePipeline } from '../context/PipelineContext';
 
 export function AnimatedCursor() {
-  const { isHighFi } = usePipeline(); // Access Context
+  const { isHighFi } = usePipeline();
   const [position, setPosition] = useState({ x: 0, y: 0 });
   const [isPointer, setIsPointer] = useState(false);
 
   useEffect(() => {
-    // Optimization: Don't attach listeners unless HighFi
     if (!isHighFi) return;
 
     const updatePosition = (e: MouseEvent) => {
@@ -24,24 +23,26 @@ export function AnimatedCursor() {
     return () => window.removeEventListener('mousemove', updatePosition);
   }, [isHighFi]);
 
-  // If not High Fidelity, return null (No custom cursor)
   if (!isHighFi) return null;
 
   return (
     <>
+      {/* INNER DOT: Restored (w-6 h-6) */}
       <div
-        className="fixed w-4 h-4 rounded-full pointer-events-none z-50 mix-blend-difference hidden lg:block"
+        className="fixed w-6 h-6 rounded-full pointer-events-none z-50 mix-blend-difference hidden lg:block"
         style={{
           left: `${position.x}px`,
           top: `${position.y}px`,
           transform: 'translate(-50%, -50%)',
-          background: 'white',
-          transition: 'transform 0.15s ease-out',
+          background: 'white', 
+          transition: 'transform 0.1s ease-out',
           ...(isPointer && { transform: 'translate(-50%, -50%) scale(1.5)' })
         }}
       />
+      
+      {/* OUTER RING */}
       <div
-        className="fixed w-8 h-8 rounded-full border-2 border-white/30 pointer-events-none z-50 mix-blend-difference hidden lg:block"
+        className="fixed w-12 h-12 rounded-full border-2 border-white/30 pointer-events-none z-50 mix-blend-difference hidden lg:block"
         style={{
           left: `${position.x}px`,
           top: `${position.y}px`,

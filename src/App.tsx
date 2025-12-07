@@ -1,33 +1,30 @@
 import { ThemeProvider } from './context/ThemeContext';
 import { PipelineProvider, usePipeline } from './context/PipelineContext';
 import { Navigation } from './components/Navigation';
-import { Hero } from './components/Hero';
+import { Hero } from './components/Hero'; // Fixed: Named import
 import { About } from './components/About';
 import { Projects } from './components/Projects';
 import { Skills } from './components/Skills';
 import { Achievements } from './components/Achievements';
 import { Contact } from './components/Contact';
 import { Footer } from './components/Footer';
-import { AnimatedCursor } from './components/AnimatedCursor';
+import { AnimatedCursor } from './components/AnimatedCursor'; // Fixed: Named import
 import { PipelineHUD } from './components/PipelineHUD';
 
-// Create a wrapper component to consume the hook (since App uses the Provider)
+// Wrapper to consume the Pipeline Context
 function PortfolioContent() {
-  const { isCss, isJs } = usePipeline();
+  const { isCss } = usePipeline();
 
   return (
     <div 
       className={`min-h-screen transition-colors duration-300 ${
         isCss 
-          ? 'bg-white dark:bg-gray-900 font-sans' // CSS Mode: Modern Font + Dark Mode support
-          : 'bg-white text-black font-serif'      // HTML Mode: Times New Roman + Pure White + Black Text
+          ? 'bg-white dark:bg-gray-900 font-sans'
+          : 'bg-white text-black font-serif'
       }`}
     >
-      {/* Only show Custom Cursor in High-Fi mode (handled inside the component) */}
       <AnimatedCursor />
-      
       <Navigation />
-      
       <main>
         <Hero />
         <About />
@@ -36,11 +33,7 @@ function PortfolioContent() {
         <Achievements />
         <Contact />
       </main>
-      
-      {/* Footer is styled in its own file, but relies on isCss check inside it too */}
       <Footer />
-      
-      {/* HUD needs to be visible always so you can switch modes */}
       <PipelineHUD /> 
     </div>
   );

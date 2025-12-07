@@ -24,7 +24,7 @@ const projects: Project[] = [
     title: 'Restaurant management',
     description: 'Full-featured e-commerce platform with stripe integration.',
     image: 'https://images.pexels.com/photos/3184291/pexels-photo-3184291.jpeg?auto=compress&cs=tinysrgb&w=800',
-    tech: ['React', 'TypeScript', 'Redux', 'Stripe', 'Firebase'],
+    tech: ['Java Script', 'TypeScript', 'PostgreSQL', 'Supabase'],
     liveUrl: 'vortex-fitness.vercel.app',
     githubUrl: '#'
   },

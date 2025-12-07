@@ -55,7 +55,7 @@ export function About() {
         
         <p>
           Front-End Engineer obsessed with clean UI, smooth animations, and building products people love.
-          Skilled in React, Next.js, TypeScript, Tailwind, and design systems.
+          Skilled in Java Script, TypeScript, Tailwind, and design systems.
         </p>
         <p>
           I love creating interactive experiences and AI-enhanced web apps that push the boundaries
@@ -134,7 +134,7 @@ export function About() {
             <div className="space-y-6 text-lg text-gray-600 dark:text-gray-300 leading-relaxed">
               <p>
                 Front-End Engineer obsessed with clean UI, smooth animations, and building products people love.
-                Skilled in <span className="font-semibold text-gray-900 dark:text-white">React, Next.js, TypeScript, Tailwind</span>, and design systems.
+                Skilled in <span className="font-semibold text-gray-900 dark:text-white">Java Script, TypeScript, Tailwind</span>, and design systems.
               </p>
               <p>
                 I love creating interactive experiences and AI-enhanced web apps that push the boundaries

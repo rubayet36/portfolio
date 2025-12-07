@@ -71,7 +71,7 @@ export function Hero() {
           </h1>
 
           <p className="text-xl md:text-2xl text-gray-600 dark:text-gray-300 mb-12 max-w-3xl mx-auto leading-relaxed">
-            I build modern, fast, elegant web apps with React, TypeScript, and AI.
+            I build modern, fast, elegant web apps with Java Script, TypeScript, and AI.
           </p>
 
           <div className="flex flex-col sm:flex-row gap-6 justify-center items-center">

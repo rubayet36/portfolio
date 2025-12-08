@@ -1,18 +1,14 @@
-import { Code2, Sparkles, Heart, Zap } from 'lucide-react';
 import { useEffect, useRef, useState } from 'react';
+import { Code2, Sparkles, Zap } from 'lucide-react';
 import { usePipeline } from '../context/PipelineContext';
-import ScrollFloat from './ScrollFloat';
-import VariableProximity from './VariableProximity';
-import DecryptedText from './DecryptedText';
 
 export function About() {
   const { isCss, isJs, isHighFi } = usePipeline();
-  
   const [isVisible, setIsVisible] = useState(false);
-  const sectionRef = useRef<HTMLDivElement>(null);
-  const containerRef = useRef<HTMLDivElement>(null);
+  const sectionRef = useRef<HTMLElement>(null);
 
   useEffect(() => {
+    // Only run observer if JS is enabled
     if (!isJs) return;
 
     const observer = new IntersectionObserver(
@@ -32,145 +28,154 @@ export function About() {
   }, [isJs]);
 
   const highlights = [
-    { icon: Code2, text: 'Clean, maintainable code', color: 'from-blue-500 to-cyan-500' },
-    { icon: Sparkles, text: 'Smooth animations', color: 'from-cyan-500 to-teal-500' },
-    { icon: Heart, text: 'User-centered design', color: 'from-teal-500 to-green-500' },
-    { icon: Zap, text: 'High performance', color: 'from-green-500 to-emerald-500' }
+    {
+      icon: Code2,
+      title: '5+ Years',
+      description: 'Building modern web applications',
+      color: 'from-blue-500 to-cyan-500'
+    },
+    {
+      icon: Sparkles,
+      title: 'Creative',
+      description: 'Design-focused development approach',
+      color: 'from-purple-500 to-pink-500'
+    },
+    {
+      icon: Zap,
+      title: 'Performance',
+      description: 'Optimized for speed and efficiency',
+      color: 'from-orange-500 to-red-500'
+    }
   ];
 
-  const descriptionText = "Front-End Engineer obsessed with clean UI, smooth animations, and building products people love. Skilled in Java Script, TypeScript, Tailwind, and design systems.";
-  const boundaryText = "I love creating interactive experiences and AI-enhanced web apps that push the boundaries of what's possible on the web. Every project is an opportunity to craft something beautiful and functional.";
+  const coreValues = ['Clean Code', 'User-Centric Design', 'Continuous Learning', 'Collaborative Spirit'];
 
-  // --- RAW HTML MODE ---
+  // --- STAGE 0: RAW HTML MODE ---
   if (!isCss) {
     return (
       <section id="about" style={{ padding: '20px', borderBottom: '2px solid black' }}>
         <h2>About Me</h2>
-        <p>2+ Years Experience</p>
-        <p>{descriptionText}</p>
-        <p>{boundaryText}</p>
-        <ul>{highlights.map((h, i) => <li key={i}>{h.text}</li>)}</ul>
+        <p>
+          I'm a passionate Frontend Engineer with a keen eye for detail and a love for creating seamless user experiences.
+        </p>
+        
+        <h3>Core Values</h3>
+        <ul>
+          {coreValues.map(val => <li key={val}>{val}</li>)}
+        </ul>
+
+        <h3>Highlights</h3>
+        <ul>
+          {highlights.map(item => (
+            <li key={item.title}><strong>{item.title}</strong>: {item.description}</li>
+          ))}
+        </ul>
       </section>
     );
   }
 
-  // --- STYLED MODE ---
+  // --- STAGE 1+: STYLED MODE ---
   return (
     <section
       id="about"
       ref={sectionRef}
-      className="py-32 bg-gradient-to-br from-gray-50 via-blue-50 to-cyan-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 relative overflow-hidden"
+      className="min-h-screen flex items-center py-20 bg-white dark:bg-slate-950 transition-colors duration-700 relative overflow-hidden"
     >
+      {/* High-Fi Mode: Background Blobs */}
       {isHighFi && (
         <>
-          <div className="absolute top-20 right-20 w-72 h-72 bg-blue-300/20 dark:bg-blue-600/10 rounded-full blur-3xl" />
-          <div className="absolute bottom-20 left-20 w-72 h-72 bg-cyan-300/20 dark:bg-cyan-600/10 rounded-full blur-3xl" />
+          <div className="absolute top-20 right-20 w-96 h-96 bg-blue-500/10 rounded-full blur-3xl animate-pulse" />
+          <div className="absolute bottom-20 left-20 w-96 h-96 bg-purple-500/10 rounded-full blur-3xl animate-pulse delay-1000" />
         </>
       )}
 
-      <div className="max-w-7xl mx-auto px-6 relative z-10">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
-          
-          {/* Image Column */}
-          <div className={`transition-all duration-1000 ${
-              (isVisible || !isJs) ? 'opacity-100 translate-x-0' : 'opacity-0 -translate-x-10'
-            }`}>
-            <div className="relative">
-              {isHighFi && <div className="absolute inset-0 bg-gradient-to-br from-blue-600 to-cyan-600 rounded-3xl blur-2xl opacity-20" />}
-              <div className="relative bg-gradient-to-br from-gray-100 to-gray-200 dark:from-gray-800 dark:to-gray-900 rounded-3xl p-2 shadow-2xl">
-                <img src="https://i.ibb.co.com/Kx5Jzfgp/DSC-8043-2-NEF.jpg" alt="Profile" className="w-full h-auto rounded-2xl object-cover" loading="lazy" />
-              </div>
-              <div className="absolute -bottom-6 -right-6 w-32 h-32 bg-gradient-to-br from-blue-600 to-cyan-600 rounded-2xl flex items-center justify-center shadow-xl">
-                <span className="text-white text-4xl font-bold">2+</span>
-              </div>
-              <div className="absolute -top-6 -left-6 px-6 py-3 bg-white dark:bg-gray-800 rounded-2xl shadow-xl border border-gray-200 dark:border-gray-700">
-                <p className="text-sm font-semibold text-gray-900 dark:text-white">Years Experience</p>
-              </div>
-            </div>
-          </div>
-
-          {/* Content Column */}
-          <div ref={containerRef} className={`transition-all duration-1000 delay-300 ${
-              (isVisible || !isJs) ? 'opacity-100 translate-x-0' : 'opacity-0 translate-x-10'
-            }`}>
-            
-            <h2 className="text-5xl md:text-6xl font-bold mb-6 text-gray-900 dark:text-white flex flex-wrap gap-x-4 items-baseline">
-              {isJs ? (
-                <>
-                  <ScrollFloat 
-                    animationDuration={1} 
-                    ease="back.inOut(2)" 
-                    scrollStart="center bottom+=50%" 
-                    scrollEnd="bottom bottom-=40%" 
-                    stagger={0.03}
-                  >
-                    About
-                  </ScrollFloat>
-                  
-                  <ScrollFloat 
-                    animationDuration={1} 
-                    ease="back.inOut(2)" 
-                    scrollStart="center bottom+=50%" 
-                    scrollEnd="bottom bottom-=40%" 
-                    stagger={0.03}
-                    // CHANGED: Use solid colors instead of transparent gradient to fix invisibility
-                    textClassName="text-blue-600 dark:text-cyan-400"
-                  >
-                    Me
-                  </ScrollFloat>
-                </>
-              ) : (
-                <>About <span className="bg-gradient-to-r from-blue-600 to-cyan-600 bg-clip-text text-transparent">Me</span></>
-              )}
+      <div className="container mx-auto px-6 relative z-10">
+        <div className="max-w-6xl mx-auto">
+          {/* Main Container Animation */}
+          <div
+            className={`transform transition-all duration-1000 ${
+              (isVisible || !isJs) ? 'translate-y-0 opacity-100' : 'translate-y-20 opacity-0'
+            }`}
+          >
+            <h2 className="text-5xl md:text-6xl font-bold mb-12 text-slate-900 dark:text-white">
+              About Me
             </h2>
 
-            <div className="space-y-6 text-lg text-gray-600 dark:text-gray-300 leading-relaxed cursor-default">
-              
-              {/* 1. Variable Proximity Effect */}
-              {isJs ? (
-                <div style={{ minHeight: '100px' }}>
-                    <VariableProximity
-                      label={descriptionText}
-                      className="variable-proximity-label block"
-                      fromFontVariationSettings="'wght' 400, 'opsz' 9"
-                      toFontVariationSettings="'wght' 900, 'opsz' 40"
-                      containerRef={containerRef}
-                      radius={100}
-                      falloff="linear"
-                    />
+            <div className="grid md:grid-cols-2 gap-12 mb-16">
+              {/* Text Content */}
+              <div className="space-y-6">
+                <p className="text-lg text-slate-700 dark:text-slate-300 leading-relaxed">
+                  I'm a passionate Frontend Engineer with a keen eye for detail and a love for creating
+                  seamless user experiences. My journey in web development started with a curiosity
+                  about how things work on the web, and it has evolved into a career focused on
+                  building innovative, accessible, and performant applications.
+                </p>
+                <p className="text-lg text-slate-700 dark:text-slate-300 leading-relaxed">
+                  I specialize in modern JavaScript frameworks, responsive design, and interactive
+                  animations that bring websites to life. Every project is an opportunity to push
+                  the boundaries of what's possible on the web.
+                </p>
+              </div>
+
+              {/* Core Values Card */}
+              <div className="relative group">
+                {isHighFi && (
+                  <div className="absolute inset-0 bg-gradient-to-r from-blue-500 to-purple-500 rounded-2xl blur-xl opacity-50 group-hover:opacity-75 transition-opacity duration-500" />
+                )}
+                <div className="relative h-full bg-slate-100 dark:bg-slate-900 rounded-2xl p-8 border border-slate-200 dark:border-slate-800">
+                  <h3 className="text-2xl font-bold mb-6 text-slate-900 dark:text-white">Core Values</h3>
+                  <ul className="space-y-4">
+                    {coreValues.map((value, index) => (
+                      <li
+                        key={value}
+                        className={`flex items-center gap-3 text-slate-700 dark:text-slate-300 transition-all duration-500`}
+                        // Manual Stagger Logic using CSS variables or inline styles
+                        style={{
+                          transform: (isVisible || !isJs) ? 'translateX(0)' : 'translateX(20px)',
+                          opacity: (isVisible || !isJs) ? 1 : 0,
+                          transitionDelay: `${index * 100}ms`
+                        }}
+                      >
+                        <span className="w-2 h-2 bg-blue-500 rounded-full" />
+                        {value}
+                      </li>
+                    ))}
+                  </ul>
                 </div>
-              ) : (
-                <p>{descriptionText}</p>
-              )}
-              
-              {/* 2. Decrypted Text Effect */}
-              {isJs ? (
-                <div className="mt-4">
-                  <DecryptedText
-                    text={boundaryText}
-                    animateOn="view"
-                    revealDirection="start"
-                    sequential={true} 
-                    speed={20}
-                    maxIterations={15}
-                    className="text-gray-600 dark:text-gray-300"
-                    encryptedClassName="text-blue-500 font-mono text-sm opacity-70"
-                  />
-                </div>
-              ) : (
-                <p>{boundaryText}</p>
-              )}
+              </div>
             </div>
 
-            <div className="grid grid-cols-2 gap-4 mt-12">
-              {highlights.map((item, index) => (
-                <div key={index} className={`group p-6 bg-white/60 dark:bg-gray-800/60 backdrop-blur-sm rounded-2xl border border-gray-200/50 dark:border-gray-700/50 ${isJs ? 'hover:shadow-xl hover:scale-105 transition-all duration-300' : ''}`}>
-                  <div className={`w-12 h-12 mb-4 bg-gradient-to-br ${item.color} rounded-xl flex items-center justify-center ${isJs ? 'group-hover:scale-110 transition-transform duration-300' : ''}`}>
-                    <item.icon className="text-white" size={24} />
+            {/* Highlights Grid */}
+            <div className="grid md:grid-cols-3 gap-6">
+              {highlights.map((item, index) => {
+                const Icon = item.icon;
+                return (
+                  <div
+                    key={item.title}
+                    className="group relative overflow-hidden bg-slate-50 dark:bg-slate-900 rounded-2xl p-8 border border-slate-200 dark:border-slate-800 hover:border-transparent transition-all duration-500 hover:scale-105"
+                    style={{
+                      transform: (isVisible || !isJs) ? 'translateY(0)' : 'translateY(40px)',
+                      opacity: (isVisible || !isJs) ? 1 : 0,
+                      transitionDelay: `${index * 200}ms`
+                    }}
+                  >
+                    {isJs && (
+                      <div className={`absolute inset-0 bg-gradient-to-br ${item.color} opacity-0 group-hover:opacity-10 transition-opacity duration-500`} />
+                    )}
+                    <div className="relative">
+                      <div className={`w-12 h-12 mb-4 rounded-xl bg-gradient-to-br ${item.color} flex items-center justify-center`}>
+                        <Icon className="text-white" size={24} />
+                      </div>
+                      <h3 className="text-2xl font-bold mb-2 text-slate-900 dark:text-white">
+                        {item.title}
+                      </h3>
+                      <p className="text-slate-600 dark:text-slate-400">
+                        {item.description}
+                      </p>
+                    </div>
                   </div>
-                  <p className="text-sm font-semibold text-gray-900 dark:text-white">{item.text}</p>
-                </div>
-              ))}
+                );
+              })}
             </div>
           </div>
         </div>

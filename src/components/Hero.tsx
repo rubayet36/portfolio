@@ -27,7 +27,7 @@ export function Hero() {
         <div style={{ border: '1px solid black', padding: '10px', display: 'inline-block', marginBottom: '20px' }}>
           Available for freelance work
         </div>
-        <h1>Hi, I'm</h1>
+        <h1>Hi, I'm Rubayet</h1>
         <h2>Front-End Engineer</h2>
         <p>I build modern, fast, elegant web apps with React, TypeScript, and AI.</p>
         <button onClick={() => alert("Enable JS to scroll")}>View Projects</button>
@@ -60,7 +60,7 @@ export function Hero() {
 
           <div className="mb-6 leading-tight">
             <h1 className={`text-5xl md:text-7xl lg:text-8xl font-bold mb-4 ${isHighFi ? 'text-white' : 'text-gray-900 dark:text-white'}`}>
-              Hi, I'm
+              Hi, I'm Rubayet
             </h1>
             
             <div className="h-24 md:h-32 w-full max-w-6xl mx-auto relative z-20">

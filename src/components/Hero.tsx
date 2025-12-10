@@ -41,6 +41,7 @@ export function Hero() {
         <p>I build modern, fast, elegant web apps with React, TypeScript, and AI.</p>
         <button onClick={() => alert("Enable JS to scroll")}>View My Work</button>
         <button onClick={() => alert("Enable JS to scroll")}>Get In Touch</button>
+        
       </section>
     );
   }

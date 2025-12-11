@@ -1,182 +1,294 @@
 import { useEffect, useRef, useState } from 'react';
-import { Code2, Sparkles, Zap } from 'lucide-react';
+import { Code2, Sparkles, Zap, User, Send } from 'lucide-react';
 import { usePipeline } from '../context/PipelineContext';
+import { motion, AnimatePresence } from 'framer-motion';
+
+// --- CONFIG ---
+const profileImgUrl = 'https://i.postimg.cc/3wC2NKpH/DSC-8043-2-NEF.jpg';
+
+// --- CHAT DATA ---
+const chatHistory = [
+  {
+    id: 1,
+    sender: 'visitor',
+    type: 'text',
+    content: "Hi! Tell me a bit about yourself. 👋"
+  },
+  {
+    id: 2,
+    sender: 'me',
+    type: 'text',
+    content: "Hey there! I'm Rubayet. I'm a Front-End Engineer obsessed with clean UI, smooth animations, and building products people love.",
+    delay: 1000
+  },
+  {
+    id: 3,
+    sender: 'me',
+    type: 'text',
+    content: "I specialize in React, Next.js, TypeScript, and crafting robust design systems.",
+    delay: 2000
+  },
+  {
+    id: 4,
+    sender: 'visitor',
+    type: 'text',
+    content: "That sounds cool! What are your core values? 💡"
+  },
+  {
+    id: 5,
+    sender: 'me',
+    type: 'tags',
+    content: ['Clean Code', 'User-Centric Design', 'Continuous Learning', 'Collaborative Spirit'],
+    delay: 1500
+  },
+  {
+    id: 6,
+    sender: 'visitor',
+    type: 'text',
+    content: "And your experience? 🚀"
+  },
+  {
+    id: 7,
+    sender: 'me',
+    type: 'cards',
+    content: [
+      { icon: Code2, title: '5+ Years', desc: 'Dev Experience', color: 'bg-blue-500' },
+      { icon: Sparkles, title: 'Creative', desc: 'Design First', color: 'bg-purple-500' },
+      { icon: Zap, title: 'Fast', desc: 'Optimized', color: 'bg-orange-500' }
+    ],
+    delay: 1500
+  }
+];
 
 export function About() {
   const { isCss, isJs, isHighFi } = usePipeline();
-  const [isVisible, setIsVisible] = useState(false);
+  const [visibleMessages, setVisibleMessages] = useState<number[]>([]);
+  const [isTyping, setIsTyping] = useState(false);
   const sectionRef = useRef<HTMLElement>(null);
+  const hasStartedRef = useRef(false);
 
+  // --- ANIMATION LOGIC (JS MODE) ---
   useEffect(() => {
-    // Only run observer if JS is enabled
-    if (!isJs) return;
+    if (!isJs) {
+      // If JS is off, show all messages immediately
+      setVisibleMessages(chatHistory.map(m => m.id));
+      return;
+    }
 
     const observer = new IntersectionObserver(
       ([entry]) => {
-        if (entry.isIntersecting) {
-          setIsVisible(true);
+        if (entry.isIntersecting && !hasStartedRef.current) {
+          hasStartedRef.current = true;
+          playConversation();
         }
       },
-      { threshold: 0.2 }
+      { threshold: 0.3 }
     );
 
-    if (sectionRef.current) {
-      observer.observe(sectionRef.current);
-    }
-
+    if (sectionRef.current) observer.observe(sectionRef.current);
     return () => observer.disconnect();
   }, [isJs]);
 
-  const highlights = [
-    {
-      icon: Code2,
-      title: '5+ Years',
-      description: 'Building modern web applications',
-      color: 'from-blue-500 to-cyan-500'
-    },
-    {
-      icon: Sparkles,
-      title: 'Creative',
-      description: 'Design-focused development approach',
-      color: 'from-purple-500 to-pink-500'
-    },
-    {
-      icon: Zap,
-      title: 'Performance',
-      description: 'Optimized for speed and efficiency',
-      color: 'from-orange-500 to-red-500'
+  const playConversation = async () => {
+    let currentDelay = 0;
+
+    for (const msg of chatHistory) {
+      // 1. If it's MY message, show typing indicator first
+      if (msg.sender === 'me') {
+        setTimeout(() => setIsTyping(true), currentDelay);
+        currentDelay += 1000; // Typing duration
+      }
+
+      // 2. Reveal the message
+      setTimeout(() => {
+        setIsTyping(false);
+        setVisibleMessages(prev => [...prev, msg.id]);
+      }, currentDelay);
+
+      // 3. Wait a bit before next message (reading time)
+      currentDelay += msg.sender === 'visitor' ? 800 : 1200;
     }
-  ];
+  };
 
-  const coreValues = ['Clean Code', 'User-Centric Design', 'Continuous Learning', 'Collaborative Spirit'];
-
-  // --- STAGE 0: RAW HTML MODE ---
+  // --- RAW HTML MODE ---
   if (!isCss) {
     return (
       <section id="about" style={{ padding: '20px', borderBottom: '2px solid black' }}>
-        <h2>About Me</h2>
-        <p>
-          I'm a passionate Frontend Engineer with a keen eye for detail and a love for creating seamless user experiences.
-        </p>
-        
-        <h3>Core Values</h3>
-        <ul>
-          {coreValues.map(val => <li key={val}>{val}</li>)}
-        </ul>
-
-        <h3>Highlights</h3>
-        <ul>
-          {highlights.map(item => (
-            <li key={item.title}><strong>{item.title}</strong>: {item.description}</li>
-          ))}
-        </ul>
+        <h2>About Me (Chat Log)</h2>
+        {chatHistory.map(msg => (
+          <div key={msg.id} style={{ marginBottom: '10px' }}>
+            <strong>{msg.sender === 'me' ? 'Rubayet' : 'Visitor'}: </strong>
+            {msg.type === 'text' ? msg.content : '[Rich Content]'}
+          </div>
+        ))}
       </section>
     );
   }
 
-  // --- STAGE 1+: STYLED MODE ---
+  // --- STYLED CHAT MODE ---
   return (
     <section
       id="about"
       ref={sectionRef}
-      className="min-h-screen flex items-center py-20 bg-white dark:bg-slate-950 transition-colors duration-700 relative overflow-hidden"
+      className="py-24 bg-gray-50 dark:bg-slate-950 transition-colors duration-500 relative overflow-hidden"
     >
-      {/* High-Fi Mode: Background Blobs */}
+      {/* Background Decor */}
       {isHighFi && (
-        <>
-          <div className="absolute top-20 right-20 w-96 h-96 bg-blue-500/10 rounded-full blur-3xl animate-pulse" />
-          <div className="absolute bottom-20 left-20 w-96 h-96 bg-purple-500/10 rounded-full blur-3xl animate-pulse delay-1000" />
-        </>
+        <div className="absolute inset-0 pointer-events-none">
+          <div className="absolute top-1/3 left-0 w-96 h-96 bg-blue-500/5 rounded-full blur-3xl" />
+          <div className="absolute bottom-0 right-0 w-96 h-96 bg-purple-500/5 rounded-full blur-3xl" />
+        </div>
       )}
 
-      <div className="container mx-auto px-6 relative z-10">
+      <div className="container mx-auto px-4 md:px-6 relative z-10">
+        {/* CHANGED: Increased max-width from 3xl to 6xl for a wider chat window */}
         <div className="max-w-6xl mx-auto">
-          {/* Main Container Animation */}
-          <div
-            className={`transform transition-all duration-1000 ${
-              (isVisible || !isJs) ? 'translate-y-0 opacity-100' : 'translate-y-20 opacity-0'
-            }`}
-          >
-            <h2 className="text-5xl md:text-6xl font-bold mb-12 text-slate-900 dark:text-white">
-              About Me
+          
+          {/* Header */}
+          <div className="text-center mb-12">
+            <h2 className="text-4xl md:text-5xl font-bold text-slate-900 dark:text-white mb-4">
+              About <span className="text-blue-600 dark:text-cyan-400">Me</span>
             </h2>
+            <p className="text-slate-500 dark:text-slate-400">Let's have a quick chat</p>
+          </div>
 
-            <div className="grid md:grid-cols-2 gap-12 mb-16">
-              {/* Text Content */}
-              <div className="space-y-6">
-                <p className="text-lg text-slate-700 dark:text-slate-300 leading-relaxed">
-                  I'm a passionate Frontend Engineer with a keen eye for detail and a love for creating
-                  seamless user experiences. My journey in web development started with a curiosity
-                  about how things work on the web, and it has evolved into a career focused on
-                  building innovative, accessible, and performant applications.
-                </p>
-                <p className="text-lg text-slate-700 dark:text-slate-300 leading-relaxed">
-                  I specialize in modern JavaScript frameworks, responsive design, and interactive
-                  animations that bring websites to life. Every project is an opportunity to push
-                  the boundaries of what's possible on the web.
-                </p>
+          {/* Chat Window Container */}
+          <div className={`
+            bg-white dark:bg-slate-900 rounded-3xl shadow-2xl border border-slate-200 dark:border-slate-800 overflow-hidden min-h-[600px] flex flex-col
+            ${isHighFi ? 'backdrop-blur-sm bg-white/80 dark:bg-slate-900/80' : ''}
+          `}>
+            
+            {/* Window Header */}
+            <div className="bg-slate-100 dark:bg-slate-800/50 p-4 border-b border-slate-200 dark:border-slate-800 flex items-center gap-3">
+              <div className="relative">
+                {/* CHANGED: Used profile image */}
+                <img 
+                  src={profileImgUrl} 
+                  alt="Rubayet" 
+                  className="w-10 h-10 rounded-full object-cover border-2 border-white dark:border-slate-800"
+                />
+                <div className="absolute bottom-0 right-0 w-3 h-3 bg-green-500 rounded-full border-2 border-white dark:border-slate-800"></div>
               </div>
-
-              {/* Core Values Card */}
-              <div className="relative group">
-                {isHighFi && (
-                  <div className="absolute inset-0 bg-gradient-to-r from-blue-500 to-purple-500 rounded-2xl blur-xl opacity-50 group-hover:opacity-75 transition-opacity duration-500" />
-                )}
-                <div className="relative h-full bg-slate-100 dark:bg-slate-900 rounded-2xl p-8 border border-slate-200 dark:border-slate-800">
-                  <h3 className="text-2xl font-bold mb-6 text-slate-900 dark:text-white">Core Values</h3>
-                  <ul className="space-y-4">
-                    {coreValues.map((value, index) => (
-                      <li
-                        key={value}
-                        className={`flex items-center gap-3 text-slate-700 dark:text-slate-300 transition-all duration-500`}
-                        // Manual Stagger Logic using CSS variables or inline styles
-                        style={{
-                          transform: (isVisible || !isJs) ? 'translateX(0)' : 'translateX(20px)',
-                          opacity: (isVisible || !isJs) ? 1 : 0,
-                          transitionDelay: `${index * 100}ms`
-                        }}
-                      >
-                        <span className="w-2 h-2 bg-blue-500 rounded-full" />
-                        {value}
-                      </li>
-                    ))}
-                  </ul>
-                </div>
+              <div>
+                <h3 className="font-bold text-slate-900 dark:text-white text-sm">Rubayet Khan</h3>
+                <p className="text-xs text-blue-600 dark:text-cyan-400 font-medium">Online</p>
               </div>
             </div>
 
-            {/* Highlights Grid */}
-            <div className="grid md:grid-cols-3 gap-6">
-              {highlights.map((item, index) => {
-                const Icon = item.icon;
-                return (
-                  <div
-                    key={item.title}
-                    className="group relative overflow-hidden bg-slate-50 dark:bg-slate-900 rounded-2xl p-8 border border-slate-200 dark:border-slate-800 hover:border-transparent transition-all duration-500 hover:scale-105"
-                    style={{
-                      transform: (isVisible || !isJs) ? 'translateY(0)' : 'translateY(40px)',
-                      opacity: (isVisible || !isJs) ? 1 : 0,
-                      transitionDelay: `${index * 200}ms`
-                    }}
-                  >
-                    {isJs && (
-                      <div className={`absolute inset-0 bg-gradient-to-br ${item.color} opacity-0 group-hover:opacity-10 transition-opacity duration-500`} />
-                    )}
-                    <div className="relative">
-                      <div className={`w-12 h-12 mb-4 rounded-xl bg-gradient-to-br ${item.color} flex items-center justify-center`}>
-                        <Icon className="text-white" size={24} />
+            {/* Messages Area */}
+            <div className="flex-1 p-6 space-y-6 overflow-y-auto">
+              <AnimatePresence mode='popLayout'>
+                {chatHistory.map((msg) => {
+                  if (!visibleMessages.includes(msg.id)) return null;
+
+                  const isMe = msg.sender === 'me';
+
+                  return (
+                    <motion.div
+                      key={msg.id}
+                      initial={isJs ? { opacity: 0, y: 20, scale: 0.9 } : { opacity: 1, y: 0 }}
+                      animate={{ opacity: 1, y: 0, scale: 1 }}
+                      transition={{ type: "spring", stiffness: 200, damping: 20 }}
+                      className={`flex ${isMe ? 'justify-start' : 'justify-end'}`}
+                    >
+                      <div className={`flex items-end gap-2 max-w-[85%] md:max-w-[70%] ${isMe ? 'flex-row' : 'flex-row-reverse'}`}>
+                        
+                        {/* Avatar Display */}
+                        {isMe ? (
+                          // CHANGED: Used profile image for 'me'
+                          <img 
+                            src={profileImgUrl} 
+                            alt="Me" 
+                            className="w-8 h-8 rounded-full flex-shrink-0 object-cover"
+                          />
+                        ) : (
+                          // Visitor icon
+                          <div className="w-8 h-8 rounded-full flex-shrink-0 flex items-center justify-center bg-slate-200 dark:bg-slate-700 text-slate-600 dark:text-slate-300">
+                             <User size={14} />
+                          </div>
+                        )}
+
+                        {/* Bubble Content */}
+                        <div className={`
+                          p-4 rounded-2xl shadow-sm text-sm md:text-base leading-relaxed
+                          ${isMe 
+                            ? 'bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-200 rounded-bl-none border border-slate-100 dark:border-slate-700' 
+                            : 'bg-blue-600 text-white rounded-br-none'}
+                        `}>
+                          {/* TEXT MESSAGE */}
+                          {msg.type === 'text' && <p>{msg.content}</p>}
+
+                          {/* TAGS MESSAGE (Core Values) */}
+                          {msg.type === 'tags' && Array.isArray(msg.content) && (
+                            <div className="flex flex-wrap gap-2">
+                              {msg.content.map(tag => (
+                                <span key={tag} className="px-3 py-1 bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300 rounded-full text-xs font-semibold border border-slate-200 dark:border-slate-600">
+                                  {tag}
+                                </span>
+                              ))}
+                            </div>
+                          )}
+
+                          {/* CARDS MESSAGE (Highlights) */}
+                          {msg.type === 'cards' && Array.isArray(msg.content) && (
+                            <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 mt-1">
+                              {msg.content.map((card: any) => (
+                                <div key={card.title} className="bg-slate-50 dark:bg-slate-900 p-3 rounded-xl border border-slate-100 dark:border-slate-700 flex flex-col items-center text-center gap-2">
+                                  <div className={`w-8 h-8 rounded-full ${card.color} flex items-center justify-center text-white`}>
+                                    <card.icon size={14} />
+                                  </div>
+                                  <div>
+                                    <div className="font-bold text-slate-900 dark:text-white text-xs">{card.title}</div>
+                                    <div className="text-[10px] text-slate-500 uppercase font-semibold">{card.desc}</div>
+                                  </div>
+                                </div>
+                              ))}
+                            </div>
+                          )}
+                        </div>
                       </div>
-                      <h3 className="text-2xl font-bold mb-2 text-slate-900 dark:text-white">
-                        {item.title}
-                      </h3>
-                      <p className="text-slate-600 dark:text-slate-400">
-                        {item.description}
-                      </p>
+                    </motion.div>
+                  );
+                })}
+
+                {/* Typing Indicator */}
+                {isTyping && isJs && (
+                  <motion.div 
+                    initial={{ opacity: 0, y: 10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, scale: 0.5 }}
+                    className="flex justify-start"
+                  >
+                    <div className="flex items-end gap-2">
+                       {/* CHANGED: Used profile image for typing indicator */}
+                      <img 
+                        src={profileImgUrl} 
+                        alt="Typing..." 
+                        className="w-8 h-8 rounded-full flex-shrink-0 object-cover"
+                      />
+                      <div className="bg-white dark:bg-slate-800 p-4 rounded-2xl rounded-bl-none border border-slate-100 dark:border-slate-700 shadow-sm flex gap-1">
+                        <span className="w-2 h-2 bg-slate-400 rounded-full animate-bounce" style={{ animationDelay: '0ms' }} />
+                        <span className="w-2 h-2 bg-slate-400 rounded-full animate-bounce" style={{ animationDelay: '150ms' }} />
+                        <span className="w-2 h-2 bg-slate-400 rounded-full animate-bounce" style={{ animationDelay: '300ms' }} />
+                      </div>
                     </div>
-                  </div>
-                );
-              })}
+                  </motion.div>
+                )}
+              </AnimatePresence>
             </div>
+
+            {/* Input Area (Decorative) */}
+            <div className="p-4 bg-white dark:bg-slate-900 border-t border-slate-200 dark:border-slate-800">
+              <div className="flex gap-2">
+                <div className="flex-1 bg-slate-100 dark:bg-slate-800 rounded-full px-4 py-3 text-sm text-slate-400 cursor-not-allowed">
+                  Reply to Rubayet...
+                </div>
+                <button className="w-10 h-10 bg-blue-600 rounded-full flex items-center justify-center text-white shadow-lg hover:scale-105 transition-transform">
+                  <Send size={18} />
+                </button>
+              </div>
+            </div>
+
           </div>
         </div>
       </div>

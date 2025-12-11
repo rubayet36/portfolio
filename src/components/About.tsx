@@ -25,7 +25,7 @@ const chatHistory = [
     id: 3,
     sender: 'me',
     type: 'text',
-    content: "I specialize in React, Next.js, TypeScript, and crafting robust design systems.",
+    content: "I specialize in Java Script, Next.js, TypeScript, and crafting robust design systems.",
     delay: 2000
   },
   {
@@ -52,7 +52,7 @@ const chatHistory = [
     sender: 'me',
     type: 'cards',
     content: [
-      { icon: Code2, title: '5+ Years', desc: 'Dev Experience', color: 'bg-blue-500' },
+      { icon: Code2, title: '1+ Years', desc: 'Dev Experience', color: 'bg-blue-500' },
       { icon: Sparkles, title: 'Creative', desc: 'Design First', color: 'bg-purple-500' },
       { icon: Zap, title: 'Fast', desc: 'Optimized', color: 'bg-orange-500' }
     ],

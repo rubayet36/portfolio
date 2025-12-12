@@ -9,7 +9,8 @@ export default {
     extend: {
       animation: {
         blob: "blob 7s infinite",
-        gradient: 'gradient 8s linear infinite', // Added this
+        gradient: 'gradient 8s linear infinite',
+        shine: 'shine 5s linear infinite', // Added this
       },
       keyframes: {
         blob: {
@@ -18,10 +19,14 @@ export default {
           "66%": { transform: "translate(-20px, 20px) scale(0.9)" },
           "100%": { transform: "translate(0px, 0px) scale(1)" },
         },
-        gradient: { // Added this
+        gradient: {
           '0%': { backgroundPosition: '0% 50%' },
           '50%': { backgroundPosition: '100% 50%' },
           '100%': { backgroundPosition: '0% 50%' },
+        },
+        shine: { // Added this
+          '0%': { 'background-position': '100%' },
+          '100%': { 'background-position': '-100%' },
         },
       },
     },

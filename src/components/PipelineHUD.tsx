@@ -1,6 +1,7 @@
-import { Settings, Code, FileCode, Zap, Sparkles } from 'lucide-react';
+import { Code, FileCode, Zap, Sparkles } from 'lucide-react';
 import { usePipeline } from '../context/PipelineContext';
 import { motion } from 'framer-motion';
+import ShinyText from './ShinyText'; // <--- Import the new component
 
 export function PipelineHUD() {
   const { stage, setStage } = usePipeline();
@@ -14,9 +15,9 @@ export function PipelineHUD() {
 
   return (
     <div className="fixed bottom-6 right-6 z-50 flex flex-col items-end gap-2">
-       {/* Instruction Tooltip */}
-      <div className="bg-black/80 text-white text-xs px-3 py-1 rounded mb-2 backdrop-blur-md">
-        Browser Rendering Engine
+       {/* Instruction Tooltip with Shiny Text */}
+      <div className="bg-black/80 text-white text-xs px-3 py-1 rounded mb-2 backdrop-blur-md border border-white/10 shadow-lg">
+        <ShinyText text="See my skills in action" speed={3} className="font-semibold text-white/90" />
       </div>
       
       <motion.div 

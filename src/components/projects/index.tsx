@@ -128,8 +128,8 @@ const Projects: React.FC<ProjectsSectionProps> = ({
       title: "Portfolio",
       category: "Web Development",
       year: "2024",
-      image: "./img/portfolio/landing.webp",
-      imageDetail: "./img/portfolio/about.webp",
+      image: "./img/portfolio/port.png",
+      imageDetail: "./img/portfolio/about.png",
       description:
         "This portfolio showcases a range of web development projects, demonstrating proficiency in creating practical, user-focused applications. From appointment management systems to specialized mobile apps, each project highlights problem-solving skills and technical expertise. Click the arrow to view the Figma Design",
       technologies: {
@@ -137,7 +137,7 @@ const Projects: React.FC<ProjectsSectionProps> = ({
         backend: "N/A",
       },
       color: "255 255 255",
-      link: "https://www.figma.com/design/fSOLXbVsHPG3k61ffrfFLQ/Portfolio?m=auto&t=KL4Fad6LDLPN60Us-1",
+      link: "https://rubayetkhan.vercel.app/",
     },
   ];
 

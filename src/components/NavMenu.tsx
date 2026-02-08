@@ -115,13 +115,13 @@ const NavMenu: React.FC<NavMenuProps> = ({ isOpen, onClose }) => {
                 {[
                   {
                     name: "LinkedIn",
-                    link: "https://linkedin.com/in/ben-böckmann-296293265",
+                    link: "https://www.linkedin.com/in/md-rubayet-khan/",
                   },
                   {
                     name: "Instagram",
-                    link: "https://instagram.com/ben.bck_prvt",
+                    link: "https://www.instagram.com/rubayetkhan_tasin",
                   },
-                  { name: "Github", link: "https://github.com/bencodes07" },
+                  { name: "Github", link: "https://github.com/rubayet36" },
                 ].map((item, index) => (
                   <motion.li
                     key={item.name}
@@ -188,8 +188,8 @@ const NavMenu: React.FC<NavMenuProps> = ({ isOpen, onClose }) => {
           transition={{ delay: 0.5, duration: 0.3 }}
         >
           <p className="text-sm text-gray-600">Get in touch</p>
-          <a href="mailto:info@bencodes.de" className="text-lg hover:underline">
-            info@bencodes.de
+          <a href="mailto:rubayet.khan01@gmail.com" className="text-lg hover:underline">
+            rubayet.khan01@gmail.com
           </a>
         </motion.div>
       </motion.div>

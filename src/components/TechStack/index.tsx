@@ -144,7 +144,7 @@ const Icons = {
   ),
   VSCode: (
     <img
-      src="https://i.postimg.cc/G20NhSwZ/Google-Antigravity-logo.jpg"
+      src="https://antigravity.google/assets/image/antigravity-logo.png"
       alt="Antigravity"
       className="w-10 h-10 object-contain rounded-full"
     />
